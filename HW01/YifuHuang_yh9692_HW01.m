@@ -5,10 +5,14 @@ clc;
 load matlab_monday_01.mat;
 
 P1 = image_01.im;
-%imagesc(P1);
-[sy1 sx1] = size(P1);  % image size
-res1_x = 2; % image resolution x
-res1_y = 2; % image resolution y
+P2 = image_02.im;
+
+[sy1, sx1] = size(P1);  % image size, P1
+[sy2, sx2] = size(P2);  % image size, P2
+res1_x = 2; % image resolution x, P1
+res1_y = 2; % image resolution y, P1
+res2_x = 0.25; % image resolution x, P2
+res2_y = 0.25; % image resolution y, P2
 
 %% Line profile of image_01.
 
@@ -68,3 +72,20 @@ title('High pass filter')
 subplot(2,3,4)
 imagesc((recon_ram)); axis image; axis off;
 title('Ram-lak pass filter')
+
+%% Using radon and iradon to process P2.
+
+figure
+
+num_angles = angle;
+angles = 0:(180/(num_angles-1)):angle;
+line_profile_2 = radon(P2, angle);
+recon_2 = iradon(permute(line_profile_2,[2 1]),angles(2)-angles(1),sy2,'linear');
+
+subplot(1,2,1)
+imagesc([1 sx2]*res2_x,[1 sy2]*res2_y,recon_2); axis image; axis off;
+title('Recon using iradon')
+
+subplot(1,2,2)
+imagesc([1 sx2]*res2_x,[1 sy2]*res2_y,line_profile_2); axis image; axis off;
+title('Line profile using iradon')
