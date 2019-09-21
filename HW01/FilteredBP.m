@@ -1,8 +1,9 @@
 function [recon_all, recon_low, recon_high, recon_ram] = FilteredBP(image, angle, line_profile)
 
 [sy, sx] = size(image);
-num_angles = angle;
-angles = 0:(180/(num_angles-1)):angle;
+clear line_profile_filter
+num_angles = angle - 1;
+angles = 0:(180/num_angles):180;
 
 %%
 filter_allpass = ones(sx,1);  % #nofilter
@@ -21,7 +22,6 @@ end
 %%
 filter = filter_allpass;
 recon_all = zeros(sy,sx);
-clear line_profile_filter
 for a = 1:angle
     line_profile_filter(a,:) =abs(ifft(fftshift(fft(line_profile(a,:))).*filter'));
     bp_rot = repmat(line_profile_filter(a,:),[sy,1]);
@@ -32,7 +32,7 @@ end
 %%
 filter = filter_low;
 recon_low = zeros(sy,sx);
-clear line_profile_filter
+% clear line_profile_filter
 for a = 1:angle
     line_profile_filter(a,:) =abs(ifft(fftshift(fft(line_profile(a,:))).*filter'));
 	bp_rot = repmat(line_profile_filter(a,:),[sy,1]);
@@ -43,7 +43,7 @@ end
 %%
 filter = filter_high;
 recon_high = zeros(sy,sx);
-clear line_profile_filter
+% clear line_profile_filter
 for a = 1:angle
 	line_profile_filter(a,:) =abs(ifft(fftshift(fft(line_profile(a,:))).*filter'));
 	bp_rot = repmat(line_profile_filter(a,:),[sy,1]);
@@ -54,7 +54,7 @@ end
 %%
 filter = filter_ram_lak;
 recon_ram = zeros(sy,sx);
-clear line_profile_filter
+% clear line_profile_filter
 for a = 1:angle
     line_profile_filter(a,:) =abs(ifft(fftshift(fft(line_profile(a,:))).*filter'));
     bp_rot = repmat(line_profile_filter(a,:),[sy,1]);

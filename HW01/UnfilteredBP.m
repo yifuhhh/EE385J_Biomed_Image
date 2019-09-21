@@ -3,8 +3,8 @@ function [recon, line_profile] = UnfilteredBP(image, angle)
 [sy sx] = size(image);
 recon = zeros(sy,sx);
 clear line_profile
-num_angles = angle;
-angles = 0:(180/(num_angles-1)):angle;
+num_angles = angle - 1;
+angles = 0:(180/num_angles) :180;
 for j = 1:angle
     P_rot = imrotate(image,angles(j),'bilinear','crop');
     line_profile(j,:) = sum(P_rot);
