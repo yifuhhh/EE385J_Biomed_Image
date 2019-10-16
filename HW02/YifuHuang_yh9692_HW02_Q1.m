@@ -48,35 +48,41 @@ time_SUV = [0, 1, 3, 4, 7];
 %% calculate the mean value at each time point
 for t = 1:st % loop through each time point
     
-    d0 = control_SUV(:, :, :, 1);
-    d = control_SUV(:, :, :, t);  % d is just a temporary variable;
+    d0_c = control_SUV(:, :, :, 1);
+    d_c = control_SUV(:, :, :, t);  % d is just a temporary variable;
+    d0_t = treated_SUV(:, :, :, 1);
+    d_t = treated_SUV(:, :, :, t);
     tumor_mask_c(:, :, :) = control_tumor(:, :, :, t);
     muscle_mask_c(:, :, :) = control_muscle(:, :, :, t);
     tumor_mask_t(:, :, :) = treated_tumor(:, :, :, t);
     muscle_mask_t(:, :, :) = treated_muscle(:, :, :, t);
+    tumor_mask0_c(:, :, :) = control_tumor(:, :, :, 1);
+    muscle_mask0_c(:, :, :) = control_muscle(:, :, :, 1);
+    tumor_mask0_t(:, :, :) = treated_tumor(:, :, :, 1);
+    muscle_mask0_t(:, :, :) = treated_muscle(:, :, :, 1);
     
     % mean value of elements within the tumor mask;
-    tumor_tc_c(t,1) = mean(d(tumor_mask_c(:) == 1));
+    tumor_tc_c(t,1) = mean(d_c(tumor_mask_c(:) == 1));
     % mean value of elements within the tumor mask, normalized;
-    tumor_tc_c(t,2) = mean(d(tumor_mask_c(:) == 1))/mean(d0(tumor_mask_c(:) == 1));
+    tumor_tc_c(t,2) = tumor_tc_c(t,1)/mean(d0_c(tumor_mask0_c(:) == 1));
     % 95% confidence interval +/- 1.96*standard_deviation/sqrt(n)
-    tumor_tc_c(t,3) = 1.96*std(d(tumor_mask_c(:) == 1))/sqrt(sum(tumor_mask_c(:) == 1));
+    tumor_tc_c(t,3) = 1.96*std(d_c(tumor_mask_c(:) == 1))/sqrt(sum(tumor_mask_c(:) == 1));
     
     
     % repeats this for muscle, control;
-    muscle_tc_c(t,1) = mean(d(muscle_mask_c(:) == 1));
-    muscle_tc_c(t,2) = mean(d(muscle_mask_c(:) == 1))/mean(d0(muscle_mask_c(:) == 1));
-    muscle_tc_c(t,3) = 1.96*std(d(muscle_mask_c(:) == 1))/sqrt(sum(muscle_mask_c(:) == 1));
+    muscle_tc_c(t,1) = mean(d_c(muscle_mask_c(:) == 1));
+    muscle_tc_c(t,2) = muscle_tc_c(t,1)/mean(d0_c(muscle_mask0_c(:) == 1));
+    muscle_tc_c(t,3) = 1.96*std(d_c(muscle_mask_c(:) == 1))/sqrt(sum(muscle_mask_c(:) == 1));
 
     % repeats this for tumor, treated;
-    tumor_tc_t(t,1) = mean(d(tumor_mask_t(:) == 1));
-    tumor_tc_t(t,2) = mean(d(tumor_mask_t(:) == 1))/mean(d0(tumor_mask_t(:) == 1));
-    tumor_tc_t(t,3) = 1.96*std(d(tumor_mask_t(:) == 1))/sqrt(sum(tumor_mask_t(:) == 1));
+    tumor_tc_t(t,1) = mean(d_t(tumor_mask_t(:) == 1));
+    tumor_tc_t(t,2) = tumor_tc_t(t,1)/mean(d0_t(tumor_mask0_t(:) == 1));
+    tumor_tc_t(t,3) = 1.96*std(d_t(tumor_mask_t(:) == 1))/sqrt(sum(tumor_mask_t(:) == 1));
 
     % repeats this for tumor, treated;
-    muscle_tc_t(t,1) = mean(d(muscle_mask_t(:) == 1));
-    muscle_tc_t(t,2) = mean(d(muscle_mask_t(:) == 1))/mean(d0(muscle_mask_t(:) == 1));
-    muscle_tc_t(t,3) = 1.96*std(d(muscle_mask_t(:) == 1))/sqrt(sum(muscle_mask_t(:) == 1));
+    muscle_tc_t(t,1) = mean(d_t(muscle_mask_t(:) == 1));
+    muscle_tc_t(t,2) = muscle_tc_t(t,1)/mean(d0_t(muscle_mask0_t(:) == 1));
+    muscle_tc_t(t,3) = 1.96*std(d_t(muscle_mask_t(:) == 1))/sqrt(sum(muscle_mask_t(:) == 1));
 
 end
 
