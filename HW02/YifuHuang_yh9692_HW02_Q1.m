@@ -48,8 +48,8 @@ time_SUV = [0, 1, 3, 4, 7];
 %% calculate the mean value at each time point
 for t = 1:st % loop through each time point
     
-    d0_c = control_SUV(:, :, :, 1);
-    d_c = control_SUV(:, :, :, t);  % d is just a temporary variable;
+    d0_c = control_SUV(:, :, :, 1); % d0_x is the first day value
+    d_c = control_SUV(:, :, :, t);  % d_x is a temporary variable;
     d0_t = treated_SUV(:, :, :, 1);
     d_t = treated_SUV(:, :, :, t);
     tumor_mask_c(:, :, :) = control_tumor(:, :, :, t);
