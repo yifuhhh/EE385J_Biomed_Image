@@ -79,7 +79,10 @@ p_guess = [.1 .1 .1 .1]; LB = [0 0 0 0]; UB = [2 2 2 2];
 [params] = lsqcurvefit('poly3model',[p_guess],time,truth,LB,UB);
 %                                (1) .        (2)     (3)  (4)  (5) (6)
 model = poly3model(params,time);
-plot(time,truth,'.',time,model,'-k')
+plot(time, truth, '.', 'color', 'k');
+hold on
+plot(time, model, 'linewidth', 3, 'color', 'r');
+hold off
 %(1) Model function
 %(2) parameter guess
 %(3) time vector
