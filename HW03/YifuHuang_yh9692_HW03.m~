@@ -85,7 +85,7 @@ for i = 1 : 4
                     end
                 end
             else
-                bd_tumor(y, x, i) = 0;
+                bd_tumor(y, x) = 0;
             end
         end
     end
@@ -95,7 +95,7 @@ figure(4)
 for i = 1 : 4
     subplot(2, 2, i)
     imagesc(bd_tumor(:, :, i), [0, 199]); axis image; axis off;
-    title(['# of timepoint > Baseline + ' num2str(2^(i-1)) ' * SD'],'FontSize',12);
+    title(['# of timepoint Baseline + ' num2str(2^(i-1)) ' * SD'],'FontSize',15);
     colormap hot
     colorbar
 end
