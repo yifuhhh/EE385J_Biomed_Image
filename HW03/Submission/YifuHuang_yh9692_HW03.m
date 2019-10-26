@@ -49,7 +49,7 @@ xlabel('Position (mm)','FontSize',15)
 ylabel('Position (mm)','FontSize',15)
 set(gca,'FontSize',15)
 hold on
-plot(tumor_x, tumor_y, 'r', 'LineWidth', 2)
+plot(tumor_x, tumor_y, 'r', 'LineWidth', 3)
 hold off
 
 % Q 03_c
@@ -79,9 +79,13 @@ for i = 1 : 4
     for y = 1 : sy
         for x = 1 : sx
             if tumor_mask(y, x) == 1
-                bd_tumor(y, x, i) = base_m(y, x) + base_s(y, x) * 2^(i - 1);
+                for j = 1 : 199
+                    if bm(y, x, j) > (base_m(y, x) + base_s(y, x) * 2^(i - 1))
+                        bd_tumor(y, x, i) = bd_tumor(y, x, i) + 1;
+                    end
+                end
             else
-                bd_tumor(y, x) = 0;
+                bd_tumor(y, x, i) = 0;
             end
         end
     end
@@ -90,8 +94,10 @@ end
 figure(4)
 for i = 1 : 4
     subplot(2, 2, i)
-    imagesc(bd_tumor(:, :, i)); axis image; axis off;
-    title(['Baseline + ' num2str(2^(i-1)) ' * SD'],'FontSize',15);
+    imagesc(bd_tumor(:, :, i), [0, 199]); axis image; axis off;
+    title(['# of timepoint > Baseline + ' num2str(2^(i-1)) ' * SD'],'FontSize',12);
+    colormap hot
+    colorbar
 end
 
 % Q 03_e
