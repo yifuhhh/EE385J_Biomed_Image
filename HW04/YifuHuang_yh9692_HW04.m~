@@ -118,45 +118,21 @@ load matlab_monday_04.mat
 options = optimset('TolFun',1e-12,'TolX',1e-12);
 options = optimset('Display','off');
 options = optimset(options,'MaxIter',150,'MaxFunEval',2000);
-
-% TR_s1
 params_guess = zeros(2, 13);
+
 for i = 1 : 13
     truth1 = VTR_s1(i, :);
     params_guess = [0.1, 200];
     params_fit(:, i) = lsqcurvefit('HW04_function', params_guess, TR_s1, truth1, [], [], options);
 end
-Err_1 = sum(((T1-params_fit(2, :)) ./ T1) .^ 2);
 
 refx=[0 3000];
 refy=[0 3000];
 
 figure(7)
-plot(params_fit(2, :), T1, "o", refx, refy, 'k', 'LineWidth', 1)
+plot(params_fit(2, :), T1, "o", refx, refy, 'k')
 axis([0 3000 0 3000])
 title("T1 Estimation 1", 'FontSize', 20)
 xlabel("Estimated", 'FontSize', 20)
 ylabel("Actual", 'FontSize', 20)
-set(gca,'FontSize', 15, 'LineWidth', 1)
 saveas(7, 'Figure7', 'png');
-
-% TR_s2
-params_guess = zeros(2, 13);
-for i = 1 : 13
-    truth2 = VTR_s2(i, :);
-    params_guess = [0.1, 200];
-    params_fit(:, i) = lsqcurvefit('HW04_function', params_guess, TR_s2, truth2, [], [], options);
-end
-Err_2 = sum(((T1-params_fit(2, :)) ./ T1) .^ 2);
-
-refx=[0 3000];
-refy=[0 3000];
-
-figure(8)
-plot(params_fit(2, :), T1, "o", refx, refy, 'k', 'LineWidth', 1)
-axis([0 3000 0 3000])
-title("T1 Estimation 2", 'FontSize', 20)
-xlabel("Estimated", 'FontSize', 20)
-ylabel("Actual", 'FontSize', 20)
-set(gca,'FontSize', 15, 'LineWidth', 1)
-saveas(8, 'Figure8', 'png');
