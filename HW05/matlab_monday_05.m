@@ -25,20 +25,32 @@ clear all; close all; clc;
 load Patient1.mat
 data = Patient_T1.enhance;
 [sy, sx, sz] = size(data);
-for z = 1:sz
-    subplot(2,5,z)
-    imagesc(data(:,:,z),[0 1.2]); axis image; axis off; colormap gray
+for z = 1 : sz
+    subplot(2, 5, z)
+    imagesc(data(:, :, z), [0 1.5]); axis image; colormap gray
 end
 %% 
 % (2) Place ROIs in each of those slices
 
-mask = zeros(sy,sx,sz);
-for z  = 5
-    imagesc(data(:,:,z),[0 1.5]);
-    mask(:,:,z) = roipoly();
-end
+mask = zeros(sy, sx, sz);
+
+imagesc(data(:, :, z), [0 1.5]); axis image; colormap gray
+[mask(:, :, z), tumor_x, tumor_y] = roipoly();
+
 %% 
 % (3) Display ROIs over relevant tumor slices (Matlab Monday 00)
+
+for z = 1 : sz
+    figure(z)
+    imagesc(data(:, :, z), [0 1.5]); axis image; axis off; colormap gray
+    title('Segment the tumor tissue','FontSize',20)
+    xlabel('Position (mm)','FontSize',15)
+    ylabel('Position (mm)','FontSize',15)
+    set(gca,'FontSize',15)
+    hold on
+    plot(tumor_x(:, z), tumor_y(:, z), 'r', 'LineWidth', 3)
+    hold off
+end
 %% RECIST Function
 % (4) Use find command to find all x,y indices within tumor (don't forget about 
 % the image dimensions, and the position of the slice in the z-direction)
