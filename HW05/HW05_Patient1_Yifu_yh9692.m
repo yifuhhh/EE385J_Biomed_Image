@@ -83,7 +83,7 @@ plot(tumor_x5_T2, tumor_y5_T2, 'r', 'LineWidth', 3)
 hold off
 saveas(4, 'Figure1-2', 'png');
 
-% Slice 6 @ T1
+% Slice 6 @ T2
 imagesc(data_2(:, :, 6), [0 1.5]); axis image; colormap gray
 [mask_2(:, :, 6), tumor_x6_T2, tumor_y6_T2] = roipoly();
 close all
@@ -99,7 +99,7 @@ plot(tumor_x6_T2, tumor_y6_T2, 'r', 'LineWidth', 3)
 hold off
 saveas(5, 'Figure2-2', 'png');
 
-% Slice 7 @ T1
+% Slice 7 @ T2
 imagesc(data_2(:, :, 7), [0 1.5]); axis image; colormap gray
 [mask_2(:, :, 7), tumor_x7_T2, tumor_y7_T2] = roipoly();
 close all
@@ -125,3 +125,28 @@ Patient1_Tumor_Masks(:, :, 4 : 6) = mask_2(:, :, 5 : 7);
 save Patient1_Tumor_Masks.mat Patient1_Tumor_Masks;
 
 %% Calculate the longest dimension
+clear all;
+load Patient1.mat
+load Patient1_Tumor_Masks.mat
+maxdist = zeros(1, 6);
+d_dist = zeros(1, 3);
+
+for i = 1 : 6
+    maxdist(i) = solvedist(i, Patient1_Tumor_Masks(:, :, i));
+end
+
+for i = 1 : 3
+    d_dist(i) = ((maxdist(i + 3) - maxdist(i)) / maxdist(i))*100;
+end
+
+total_change = sum(d_dist)/3;
+
+if total_change == -100
+    disp('Result = CR')
+elseif (total_change > -100 && total_change <= -30)
+	disp('Result = PR')
+elseif (total_change >= 20)
+    disp('Result = PD')
+else
+	disp('Result = SD')
+end
