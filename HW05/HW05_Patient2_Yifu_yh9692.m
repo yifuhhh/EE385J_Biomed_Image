@@ -276,36 +276,28 @@ hold off
 saveas(16, 'Figure11-2', 'png');
 
 %%
-% Save the masks to .mat file. Here, Patient1_Tumor_Masks(:, :, 1:3) is
-% masks for Slices 5~7 @ T1. Patient1_Tumor_Masks(:, :, 4:6) is
-% masks for Slices 5~7 @ T2.
-Patient2_Tumor_Masks = zeros(sy, sx, 16);
-Patient2_Tumor_Masks(:, :, 1 : 8) = mask_1(:, :, 1 : 8);
-Patient2_Tumor_Masks(:, :, 9 : 16) = mask_2(:, :, 1 : 8);
-save Patient2_Tumor_Masks.mat Patient2_Tumor_Masks;
+% Save the masks to .mat file.
+
+save Patient2_Tumor_Masks_T1.mat mask_1;
+save Patient2_Tumor_Masks_T2.mat mask_2;
 
 %% Calculate the longest dimension
 clear all;
-load Patient1.mat
-load Patient1_Tumor_Masks.mat
-maxdist = zeros(1, 16);
-d_dist = zeros(1, 8);
+load Patient2.mat
+load Patient2_Tumor_Masks_T1.mat
+load Patient2_Tumor_Masks_T2.mat
 
-for i = 1 : 16
-    maxdist(i) = solvedist(i, Patient2_Tumor_Masks(:, :, i));
-end
+% Solve the maximum distance in 3D matrix
+maxdist_T1 = solvedist(mask_1);
+maxdist_T2 = solvedist(mask_2);
 
-for i = 1 : 8
-    d_dist(i) = ((maxdist(i + 8) - maxdist(i)) / maxdist(i))*100;
-end
+d_dist = ((maxdist_T2 - maxdist_T1)/maxdist_T1)*100;
 
-total_change = sum(d_dist)/8;
-
-if total_change == -100
+if d_dist == -100
     disp('Result = CR')
-elseif (total_change > -100 && total_change <= -30)
+elseif (d_dist > -100 && d_dist <= -30)
 	disp('Result = PR')
-elseif (total_change >= 20)
+elseif (d_dist >= 20)
     disp('Result = PD')
 else
 	disp('Result = SD')
