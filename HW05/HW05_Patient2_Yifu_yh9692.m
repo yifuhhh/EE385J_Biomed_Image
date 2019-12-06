@@ -137,7 +137,7 @@ close all
 
 figure(8)
 imagesc(data_1(:, :, 8), [0 1.2]); axis image; colormap gray
-title('ROI in Slice 7 @ T1','FontSize',20)
+title('ROI in Slice 8 @ T1','FontSize',20)
 xlabel('Position (mm)','FontSize',15)
 ylabel('Position (mm)','FontSize',15)
 set(gca,'FontSize',15)
@@ -266,7 +266,7 @@ close all
 
 figure(16)
 imagesc(data_2(:, :, 8), [0 1.2]); axis image; colormap gray
-title('ROI in Slice 7 @ T2','FontSize',20)
+title('ROI in Slice 8 @ T2','FontSize',20)
 xlabel('Position (mm)','FontSize',15)
 ylabel('Position (mm)','FontSize',15)
 set(gca,'FontSize',15)
